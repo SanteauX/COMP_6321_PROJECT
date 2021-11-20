@@ -2,4 +2,5 @@
 .ipynb_checkpoints
 lib/__pycache__/
 
-/data/
+data/*
+!data/raw/.gitkeep
