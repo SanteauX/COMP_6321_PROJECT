@@ -61,11 +61,11 @@ def evaluate_cv(forecaster, train_data, window_size,
               
     return results
                        
-def plot_cv_results(results, train_data):
-    ax = train_data.resample('D').sum().plot(figsize=(16, 8))
+def plot_cv_results(results, train_data, freq='D'):
+    ax = train_data.resample(freq).sum().plot(figsize=(16, 8))
     
     for split in results.itertuples():
-        sub_plot = split.y_pred.resample('D').sum().plot(ax=ax, color='orange', legend=False)
+        sub_plot = split.y_pred.resample(freq).sum().plot(ax=ax, color='orange', legend=False)
 
     # Set legend
     ax.legend(["True", "Predictions"])
