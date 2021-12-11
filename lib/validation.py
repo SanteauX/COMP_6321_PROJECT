@@ -3,11 +3,11 @@ import pandas as pd
 
 from sktime.forecasting.model_selection import ExpandingWindowSplitter
 from sktime.performance_metrics.forecasting import MeanSquaredError
-from sktime.performance_metrics.forecasting import MeanAbsolutePercentageError
+from sktime.performance_metrics.forecasting import MeanAbsoluteError
 
 
 def evaluate_cv(forecaster, train_data, window_size, 
-                scoring = (MeanAbsolutePercentageError(), MeanSquaredError(square_root=True)),
+                scoring = (MeanAbsoluteError(), MeanSquaredError(square_root=True)),
                 return_data = True):
     # Define the forecast horizon
     fh = np.arange(1, window_size+1)
@@ -71,13 +71,14 @@ def plot_cv_results(results, train_data):
     ax.legend(["True", "Predictions"])
 
 
-def eval_forecast(forecaster, fh, y_true, scoring = (MeanAbsolutePercentageError(), MeanSquaredError(square_root=True))):
+def eval_forecast(forecaster, fh, y_true, scoring = (MeanAbsoluteError(), MeanSquaredError(square_root=True))):
     # Make predictions 
     y_pred = forecaster.predict(fh)
 
     # Downsample data to daily and plot
-    ax = y_true.plot(figsize=(16, 8))
-    y_pred.plot(ax=ax)
+    ax = y_true.plot(figsize=(16, 8), label="true")
+    y_pred.plot(ax=ax, label='pred')
+    ax.legend(['true', 'pred'])
 
     # Compute RMSE
     if not isinstance(scoring, tuple):
