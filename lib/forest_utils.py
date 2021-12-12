@@ -10,7 +10,7 @@ def forest_param_search(train_features, train_labels, n_trials, num_trees, depth
 
     # Define variables to hold result metrics
     MSQ_by_trial = np.zeros(n_trials)
-    percent_error_by_trial = np.zeros(n_trials)
+    MAE_by_trial = np.zeros(n_trials)
     
     # Perform cross-validation on each model configuration
     model_index = 0
@@ -19,7 +19,7 @@ def forest_param_search(train_features, train_labels, n_trials, num_trees, depth
 
         # Define error metrics arrays
         fold_index = 0
-        percentage_errors = np.zeros(4)
+        MAEs = np.zeros(4)
         MSQs = np.zeros(4)
 
         # Perform cross-validation on the current model
@@ -40,25 +40,25 @@ def forest_param_search(train_features, train_labels, n_trials, num_trees, depth
 
             #Save metrics in an array for later analysis
             MSQs[fold_index] = msq
-            percentage_errors[fold_index] = mae/np.mean(y_test)*100
+            MAEs[fold_index] = mae
 
             # Increase fold index
             fold_index += 1
 
         # Add mean error metrics for last fold to trial metrics
         MSQ_by_trial[model_index] = np.mean(MSQs)
-        percent_error_by_trial[model_index] = percentage_errors[3]
+        MAE_by_trial[model_index] = np.mean(MAEs)
 
         # Increase model index   
         model_index +=1
 
     # Parameter search completed
     print('\nDone')
-    return (MSQ_by_trial, percent_error_by_trial)
+    return (MSQ_by_trial, MAE_by_trial)
 
 
 # Function for plotting a summary of hyperparameter effects on MSQ
-def plot_param_performance(num_trees, depths, MSQ_by_trial, percent_error_by_trial):
+def plot_param_performance(num_trees, depths, MSQ_by_trial, MAE_by_trial):
     # Plot each parameters configuration with its performance denoted by marker color
     plt.figure(figsize =(12,8))
     plt.scatter(num_trees, depths, marker = 'x', c = MSQ_by_trial, s = 100)
@@ -70,5 +70,5 @@ def plot_param_performance(num_trees, depths, MSQ_by_trial, percent_error_by_tri
     # Print summary of best classifier
     print("Best Classifier Attributes")
     print("Number of Estimators: ", num_trees[np.argmin(MSQ_by_trial)], "Max Depth: ", depths[np.argmin(MSQ_by_trial)])
-    print("Avg. % error of best classifier: ", percent_error_by_trial[np.argmin(MSQ_by_trial)] )
     print("MSE of best classifer: ", MSQ_by_trial[np.argmin(MSQ_by_trial)])
+    print("MAE of best classifier: ", MAE_by_trial[np.argmin(MAE_by_trial)] )
