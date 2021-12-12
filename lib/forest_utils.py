@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sklearn.model_selection
 
-# Use time series variant of K-fold cross validation to generate estimates of Test time performance
+# Use time series variant of K-fold cross validation to generate estimates of test time performance
 # Collect Data to later be used to define the final model.
 def forest_param_search(train_features, train_labels, n_trials, num_trees, depths):
     # Split the data
