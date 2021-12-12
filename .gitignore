@@ -5,3 +5,5 @@ lib/__pycache__/
 
 data/*
 !data/raw/.gitkeep
+!data/mr_bike_demand.csv
+!data/weather.csv
